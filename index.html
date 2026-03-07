@@ -3,34 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Tracker de Joe</title>
+    <title>Crypto Dashboard </title>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #121212; color: white; padding: 50px; }
-        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; display: inline-block; border: 1px solid #333; }
-        h1 { color: #00ff88; }
-        .price { font-size: 2em; margin: 20px 0; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background: #0b0e11; color: #eaecef; padding: 20px; }
+        .container { max-width: 600px; margin: auto; }
+        .card { background: #181a20; padding: 20px; border-radius: 16px; border: 1px solid #333; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        h1 { color: #f3ba2f; margin-bottom: 10px; } /* Color amarillo de Binance */
+        .crypto-row { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #2b2f36; }
+        .crypto-row:last-child { border-bottom: none; }
+        .symbol { font-weight: bold; color: #f3ba2f; }
+        .price { font-family: monospace; font-size: 1.2em; }
+        .binance-button { 
+            background-color: #f3ba2f; color: #000; padding: 15px 30px; 
+            border-radius: 8px; text-decoration: none; font-weight: bold; 
+            display: inline-block; margin-top: 10px; transition: 0.3s;
+        }
+        .binance-button:hover { background-color: #dba321; }
+        .footer { font-size: 0.8em; color: #707a8a; margin-top: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h1>Precio Real de USDT</h1>
-        <div id="price" class="price">Cargando...</div>
-        <p>Datos actualizados desde CoinGecko API</p>
+    <div class="container">
+        <div class="card">
+            <h1>Mercado en Tiempo Real (JPY)</h1>
+            <div id="prices-container">
+                <div class="crypto-row"><span>Bitcoin (BTC):</span> <span id="btc-price" class="price">Cargando...</span></div>
+                <div class="crypto-row"><span>Ethereum (ETH):</span> <span id="eth-price" class="price">Cargando...</span></div>
+                <div class="crypto-row"><span>Tether (USDT):</span> <span id="usdt-price" class="price">Cargando...</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Área de Intercambio</h2>
+            <p>Haz clic abajo para vender o comprar en tu cuenta de Binance:</p>
+            <a href="https://www.binance.com/es/trade/BTC_USDT" target="_blank" class="binance-button">Ir a Binance Trading</a>
+        </div>
+
+        <p class="footer">Datos oficiales de CoinGecko • Actualizado cada 30 seg.</p>
     </div>
 
     <script>
-        async function getPrice() {
+        async function getPrices() {
             try {
-                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd');
+                // Consultamos BTC, ETH y USDT en Yenes Japoneses (JPY)
+                const url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=jpy';
+                const response = await fetch(url);
                 const data = await response.json();
-                document.getElementById('price').innerText = '$' + data.tether.usd + ' USD';
+
+                document.getElementById('btc-price').innerText = '¥ ' + data.bitcoin.jpy.toLocaleString();
+                document.getElementById('eth-price').innerText = '¥ ' + data.ethereum.jpy.toLocaleString();
+                document.getElementById('usdt-price').innerText = '¥ ' + data.tether.jpy.toLocaleString();
             } catch (error) {
-                document.getElementById('price').innerText = 'Error al cargar';
+                console.error("Error:", error);
+                document.querySelectorAll('.price').forEach(el => el.innerText = 'Error');
             }
         }
-        getPrice();
-        setInterval(getPrice, 30000); // Actualiza cada 30 segundos
+
+        getPrices();
+        setInterval(getPrices, 30000); 
     </script>
 </body>
 </html>
