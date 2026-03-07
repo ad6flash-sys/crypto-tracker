@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Tracker de Joe</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #121212; color: white; padding: 50px; }
+        .card { background: #1e1e1e; padding: 20px; border-radius: 15px; display: inline-block; border: 1px solid #333; }
+        h1 { color: #00ff88; }
+        .price { font-size: 2em; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Precio Real de USDT</h1>
+        <div id="price" class="price">Cargando...</div>
+        <p>Datos actualizados desde CoinGecko API</p>
+    </div>
+
+    <script>
+        async function getPrice() {
+            try {
+                const response = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=usd');
+                const data = await response.json();
+                document.getElementById('price').innerText = '$' + data.tether.usd + ' USD';
+            } catch (error) {
+                document.getElementById('price').innerText = 'Error al cargar';
+            }
+        }
+        getPrice();
+        setInterval(getPrice, 30000); // Actualiza cada 30 segundos
+    </script>
+</body>
+</html>
