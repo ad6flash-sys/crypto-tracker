@@ -3,42 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Joe Crypto Portfolio | Business Panel</title>
+    <title>SGP Connect | Joe Crypto Service</title>
     <style>
-        :root { --gold: #f3ba2f; --dark: #0b0e11; --card: #181a20; --text: #eaecef; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: var(--text); margin: 0; padding: 0; }
+        :root { --gold: #f3ba2f; --dark: #0b0e11; --card: #181a20; --text: #eaecef; --line-green: #06C755; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--dark); color: var(--text); margin: 0; padding: 0; }
         
-        nav { background: var(--card); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; }
-        .logo { font-size: 1.5rem; font-weight: bold; color: var(--gold); }
-        .menu select { background: #2b2f36; color: white; border: 1px solid var(--gold); padding: 5px; border-radius: 5px; }
+        /* Navegación */
+        nav { background: var(--card); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; z-index: 100; flex-wrap: wrap; gap: 10px; }
+        .logo { font-size: 1.2rem; font-weight: bold; color: var(--gold); letter-spacing: 1px; }
+        .controls { display: flex; gap: 10px; }
+        select { background: #2b2f36; color: white; border: 1px solid var(--gold); padding: 8px; border-radius: 8px; cursor: pointer; outline: none; }
 
-        .container { max-width: 1000px; margin: 30px auto; padding: 20px; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .container { max-width: 1000px; margin: 20px auto; padding: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
         @media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
 
-        .card { background: var(--card); padding: 20px; border-radius: 16px; border: 1px solid #333; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        h2 { color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 10px; font-size: 1.2rem; }
+        /* Tarjetas */
+        .card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid #333; box-shadow: 0 8px 20px rgba(0,0,0,0.6); }
+        h2 { color: var(--gold); border-bottom: 1px solid #333; padding-bottom: 12px; font-size: 1.2rem; margin-top: 0; }
         
+        /* Tablas */
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { color: #707a8a; text-align: left; font-size: 0.8rem; padding: 10px; }
-        td { padding: 12px 10px; border-bottom: 1px solid #2b2f36; }
-        .symbol { font-weight: bold; color: var(--gold); }
+        th { color: #707a8a; text-align: left; font-size: 0.85rem; padding: 10px; border-bottom: 1px solid #333; }
+        td { padding: 15px 10px; border-bottom: 1px solid #2b2f36; font-family: 'Courier New', Courier, monospace; }
+        .symbol { font-weight: bold; color: var(--gold); font-family: sans-serif; }
         
-        .btn-action { background: var(--gold); color: black; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; display: block; text-align: center; margin-top: 15px; border: none; cursor: pointer; width: 100%; }
+        /* Botones */
+        .btn-line { background: var(--line-green); color: white; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 20px; transition: 0.3s; }
+        .btn-line:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-action { background: var(--gold); color: black; padding: 15px; border-radius: 12px; font-weight: bold; display: block; text-align: center; margin-top: 20px; border: none; cursor: pointer; width: 100%; transition: 0.3s; }
         .btn-action:hover { background: #dba321; }
 
-        input, select { width: 100%; padding: 10px; margin-top: 10px; border-radius: 8px; border: 1px solid #333; background: #2b2f36; color: white; box-sizing: border-box; }
-        #msgEstado { margin-top: 10px; font-size: 0.9rem; text-align: center; }
+        .comision-info { font-size: 0.75rem; color: #707a8a; margin-top: 10px; line-height: 1.4; }
+        input, .select-form { width: 100%; padding: 12px; margin-top: 12px; border-radius: 10px; border: 1px solid #333; background: #2b2f36; color: white; box-sizing: border-box; }
+        #msgEstado { margin-top: 15px; font-size: 0.9rem; text-align: center; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">JOE PORTFOLIO PRO</div>
-        <div class="menu">
+        <div class="logo">SGP CONNECT</div>
+        <div class="controls">
+            <select id="langSelector" onchange="changeLanguage()">
+                <option value="es">Español</option>
+                <option value="en">English</option>
+                <option value="jp">日本語</option>
+                <option value="zh">繁體中文</option>
+            </select>
             <select id="currencySelector" onchange="updateAll()">
-                <option value="usd">Dólares (USD)</option>
-                <option value="jpy">Yenes (JPY)</option>
+                <option value="usd">USD</option>
+                <option value="jpy">JPY</option>
             </select>
         </div>
     </nav>
@@ -46,88 +60,87 @@
     <div class="container">
         <div class="grid">
             <div class="card">
-                <h2>📊 Mercado Global</h2>
+                <h2 id="txt-market-title">Precios del Servicio</h2>
                 <table>
                     <thead>
-                        <tr><th>Moneda</th><th>Precio</th></tr>
+                        <tr><th id="txt-th-coin">Moneda</th><th id="txt-th-price">Precio Final</th></tr>
                     </thead>
-                    <tbody id="market-table">
-                        <tr><td class="symbol">BTC</td><td id="market-btc">...</td></tr>
-                        <tr><td class="symbol">ETH</td><td id="market-eth">...</td></tr>
-                        <tr><td class="symbol">USDT</td><td id="market-usdt">...</td></tr>
+                    <tbody>
+                        <tr><td class="symbol">Bitcoin (BTC)</td><td id="market-btc">...</td></tr>
+                        <tr><td class="symbol">Ethereum (ETH)</td><td id="market-eth">...</td></tr>
+                        <tr><td class="symbol">Tether (USDT)</td><td id="market-usdt">...</td></tr>
                     </tbody>
                 </table>
+                <p class="comision-info" id="txt-fee-info">* El precio mostrado incluye una comisión del 5% por gestión y corretaje.</p>
             </div>
 
             <div class="card">
-                <h2>📦 Mi Inventario (Stock)</h2>
-                <table id="inventory-table">
-                    <thead>
-                        <tr><th>Moneda</th><th>Disponible</th><th>Estado</th></tr>
-                    </thead>
-                    <tbody id="inventory-body">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div class="card" style="margin-top: 20px;">
-            <h2>📝 Realizar Pedido</h2>
-            <p style="font-size: 0.9rem; color: #707a8a;">Selecciona la moneda y cantidad. Te contactaremos por email para finalizar la transacción legalmente.</p>
-            <div class="grid" style="grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
-                <input type="email" id="userEmail" placeholder="Tu Email">
-                <select id="cryptoSelect">
-                    <option value="BTC">Bitcoin</option>
-                    <option value="ETH">Ethereum</option>
-                    <option value="USDT">USDT</option>
+                <h2 id="txt-contact-title">Canal Oficial</h2>
+                <p id="txt-line-desc" style="font-size: 0.9rem;">Para soporte inmediato, llamadas de voz o verificación de transacciones, usa nuestro LINE oficial:</p>
+                <a href="https://line.me/ti/p/~sgp_connect" target="_blank" class="btn-line">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" width="25" alt="LINE">
+                    LINE: SGP_CONNECT
+                </a>
+                
+                <h2 style="margin-top: 30px; font-size: 1rem;" id="txt-order-title">Formulario de Pedido</h2>
+                <input type="email" id="userEmail" placeholder="Tu Email / Your Email">
+                <select id="cryptoSelect" class="select-form">
+                    <option value="BTC">Bitcoin (BTC)</option>
+                    <option value="ETH">Ethereum (ETH)</option>
+                    <option value="USDT">Tether (USDT)</option>
                 </select>
-                <input type="number" id="amount" placeholder="Cantidad">
+                <input type="number" id="amount" placeholder="Cantidad / Amount">
+                <button onclick="enviarAlExcel()" class="btn-action" id="txt-btn-send">Enviar Solicitud</button>
+                <p id="msgEstado"></p>
             </div>
-            <button onclick="enviarAlExcel()" class="btn-action">Enviar Solicitud de Compra</button>
-            <p id="msgEstado"></p>
         </div>
     </div>
 
     <script>
-        const currencySymbols = { usd: '$', jpy: '¥' };
-        const csvURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRIQHId0mM1ypZFOCmjB9eey3HT7LzOPWgqUu85yj-ClsFNy1y7vjI72wCDkRWNZn3AYvTnk6Pk8qGw/pub?output=csv';
-        const scriptURL = 'https://script.google.com/macros/s/170uxITq0DVDa5p-mb0eWQl4Lk_ITKGDIZGLWraw2SbReK0f9HCgulxx2/exec';
+        const translations = {
+            es: { title: "Precios del Servicio", market: "Mercado Global", contact: "Canal Oficial", line: "Para soporte inmediato vía LINE:", fee: "* El precio mostrado incluye una comisión del 5% por gestión y corretaje.", coin: "Moneda", price: "Precio Final", btn: "Enviar Solicitud", order: "Formulario de Pedido" },
+            en: { title: "Service Prices", market: "Global Market", contact: "Official Channel", line: "For immediate support via LINE:", fee: "* Prices shown include a 5% management and brokerage fee.", coin: "Coin", price: "Final Price", btn: "Send Request", order: "Order Form" },
+            jp: { title: "サービス価格", market: "グローバル市場", contact: "公式チャンネル", line: "LINEによる即時サポート：", fee: "* 表示価格には5％の事務手数料が含まれています。", coin: "通貨", price: "最終価格", btn: "リクエストを送信", order: "注文フォーム" },
+            zh: { title: "服務價格", market: "全球市場", contact: "官方頻道", line: "通過 LINE 獲得即時支持：", fee: "* 顯示價格已包含 5% 的管理和經紀費。", coin: "幣種", price: "最終價格", btn: "發送請求", order: "訂單表格" }
+        };
 
-        async function updateMarketPrices() {
+        const scriptURL = 'https://script.google.com/macros/s/170uxITq0DVDa5p-mb0eWQl4Lk_ITKGDIZGLWraw2SbReK0f9HCgulxx2/exec';
+        const feeMultiplier = 1.05; // 5% Comisión
+
+        function changeLanguage() {
+            const l = document.getElementById('langSelector').value;
+            const t = translations[l];
+            document.getElementById('txt-market-title').innerText = t.title;
+            document.getElementById('txt-contact-title').innerText = t.contact;
+            document.getElementById('txt-line-desc').innerText = t.line;
+            document.getElementById('txt-fee-info').innerText = t.fee;
+            document.getElementById('txt-th-coin').innerText = t.coin;
+            document.getElementById('txt-th-price').innerText = t.price;
+            document.getElementById('txt-btn-send').innerText = t.btn;
+            document.getElementById('txt-order-title').innerText = t.order;
+        }
+
+        async function updateAll() {
             const curr = document.getElementById('currencySelector').value;
-            const sym = currencySymbols[curr];
+            const sym = curr === 'usd' ? '$' : '¥';
             try {
                 const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=${curr}`);
                 const data = await res.json();
-                document.getElementById('market-btc').innerText = sym + ' ' + data.bitcoin[curr].toLocaleString();
-                document.getElementById('market-eth').innerText = sym + ' ' + data.ethereum[curr].toLocaleString();
-                document.getElementById('market-usdt').innerText = sym + ' ' + data.tether[curr].toLocaleString();
-            } catch (e) { console.error("Error Mercado"); }
-        }
-
-        async function loadInventory() {
-            try {
-                const res = await fetch(csvURL);
-                const data = await res.text();
-                const rows = data.split('\n').slice(1); // Ignora el encabezado
-                let html = '';
-                rows.forEach(row => {
-                    const cols = row.split(',');
-                    if(cols.length >= 3) {
-                        html += `<tr><td class="symbol">${cols[1]}</td><td>${cols[2]}</td><td><span style="color:#00ff88">Disponible</span></td></tr>`;
-                    }
-                });
-                document.getElementById('inventory-body').innerHTML = html;
-            } catch (e) { console.error("Error Inventario"); }
+                
+                document.getElementById('market-btc').innerText = sym + ' ' + (data.bitcoin[curr] * feeMultiplier).toLocaleString();
+                document.getElementById('market-eth').innerText = sym + ' ' + (data.ethereum[curr] * feeMultiplier).toLocaleString();
+                document.getElementById('market-usdt').innerText = sym + ' ' + (data.tether[curr] * feeMultiplier).toLocaleString();
+            } catch (e) { console.error("Error al actualizar precios"); }
         }
 
         async function enviarAlExcel() {
-            const btn = document.querySelector('.btn-action');
             const status = document.getElementById('msgEstado');
             const email = document.getElementById('userEmail').value;
-            if(!email) { alert("Pon tu email"); return; }
-            
-            btn.innerText = "Enviando...";
+            if(!email) { alert("Por favor ingresa tu email"); return; }
+
+            status.innerText = "⏳ Enviando solicitud...";
+            status.style.color = "#f3ba2f";
+
             const pedido = {
                 email: email,
                 moneda: document.getElementById('cryptoSelect').value,
@@ -136,23 +149,19 @@
             };
 
             try {
+                // Usamos mode: 'no-cors' para evitar problemas de bloqueo de navegador con Google Scripts
                 await fetch(scriptURL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(pedido) });
-                status.innerText = "✅ Solicitud enviada. Revisa tu email pronto.";
-                status.style.color = "#00ff88";
+                status.innerText = "✅ ¡Enviado! Te contactaremos por email o LINE.";
+                status.style.color = "#06C755";
             } catch (e) {
-                status.innerText = "❌ Error al enviar.";
+                status.innerText = "❌ Error en la conexión.";
                 status.style.color = "#ff4444";
             }
-            btn.innerText = "Enviar Solicitud de Compra";
-        }
-
-        function updateAll() {
-            updateMarketPrices();
-            loadInventory();
         }
 
         updateAll();
-        setInterval(updateAll, 60000); // Actualiza todo cada minuto
+        changeLanguage();
+        setInterval(updateAll, 60000); // Sincronizar precios cada minuto
     </script>
 </body>
 </html>
