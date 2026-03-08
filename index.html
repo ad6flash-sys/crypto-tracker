@@ -3,65 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crypto Dashboard </title>
+    <title>Joe Crypto Portfolio | Negocios</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; background: #0b0e11; color: #eaecef; padding: 20px; }
-        .container { max-width: 600px; margin: auto; }
-        .card { background: #181a20; padding: 20px; border-radius: 16px; border: 1px solid #333; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
-        h1 { color: #f3ba2f; margin-bottom: 10px; } /* Color amarillo de Binance */
-        .crypto-row { display: flex; justify-content: space-between; padding: 15px; border-bottom: 1px solid #2b2f36; }
-        .crypto-row:last-child { border-bottom: none; }
-        .symbol { font-weight: bold; color: #f3ba2f; }
-        .price { font-family: monospace; font-size: 1.2em; }
-        .binance-button { 
-            background-color: #f3ba2f; color: #000; padding: 15px 30px; 
-            border-radius: 8px; text-decoration: none; font-weight: bold; 
-            display: inline-block; margin-top: 10px; transition: 0.3s;
-        }
-        .binance-button:hover { background-color: #dba321; }
-        .footer { font-size: 0.8em; color: #707a8a; margin-top: 20px; }
+        :root { --gold: #f3ba2f; --dark: #0b0e11; --card: #181a20; --text: #eaecef; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--dark); color: var(--text); margin: 0; padding: 0; }
+        
+        /* Barra de Menú */
+        nav { background: var(--card); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; position: sticky; top: 0; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: var(--gold); }
+        .menu select { background: #2b2f36; color: white; border: 1px solid var(--gold); padding: 5px; border-radius: 5px; }
+
+        .container { max-width: 900px; margin: 30px auto; padding: 20px; }
+        .card { background: var(--card); padding: 25px; border-radius: 16px; border: 1px solid #333; margin-bottom: 20px; text-align: center; }
+        
+        /* Tabla de Precios */
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        th { color: #707a8a; font-weight: 400; padding: 10px; border-bottom: 1px solid #333; }
+        td { padding: 15px; border-bottom: 1px solid #2b2f36; font-size: 1.1rem; }
+        .symbol { color: var(--gold); font-weight: bold; }
+
+        /* Sección de Venta/Contacto */
+        .btn-contact { background: var(--gold); color: black; padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; margin-top: 15px; }
+        .btn-contact:hover { background: #dba321; }
+        input[type="email"] { width: 80%; padding: 10px; margin-top: 10px; border-radius: 5px; border: none; }
     </style>
 </head>
 <body>
 
+    <nav>
+        <div class="logo">JOE PORTFOLIO</div>
+        <div class="menu">
+            <label>Moneda: </label>
+            <select id="currencySelector" onchange="updatePrices()">
+                <option value="usd">Dólares (USD)</option>
+                <option value="jpy">Yenes (JPY)</option>
+            </select>
+        </div>
+    </nav>
+
     <div class="container">
         <div class="card">
-            <h1>Mercado en Tiempo Real (JPY)</h1>
-            <div id="prices-container">
-                <div class="crypto-row"><span>Bitcoin (BTC):</span> <span id="btc-price" class="price">Cargando...</span></div>
-                <div class="crypto-row"><span>Ethereum (ETH):</span> <span id="eth-price" class="price">Cargando...</span></div>
-                <div class="crypto-row"><span>Tether (USDT):</span> <span id="usdt-price" class="price">Cargando...</span></div>
-            </div>
+            <h2>📈 Portafolio en Tiempo Real</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Moneda</th>
+                        <th>Precio Actual</th>
+                        <th>Disponibilidad</th>
+                    </tr>
+                </thead>
+                <tbody id="crypto-table">
+                    <tr><td class="symbol">BTC</td> <td id="btc-price">Cargando...</td> <td>Inmediata</td> </tr>
+                    <tr><td class="symbol">ETH</td> <td id="eth-price">Cargando...</td> <td>Inmediata</td> </tr>
+                    <tr><td class="symbol">USDT</td> <td id="usdt-price">Cargando...</td> <td>Inmediata</td> </tr>
+                </tbody>
+            </table>
         </div>
 
         <div class="card">
-            <h2>Área de Intercambio</h2>
-            <p>Haz clic abajo para vender o comprar en tu cuenta de Binance:</p>
-            <a href="https://www.binance.com/es/trade/BTC_USDT" target="_blank" class="binance-button">Ir a Binance Trading</a>
+            <h2>📥 Adquirir Monedas</h2>
+            <p>Si deseas comprar o vender, envíanos una solicitud formal por email.</p>
+            <p><strong>Tu Email de contacto:</strong></p>
+            <a href="mailto:tu-email@ejemplo.com?subject=Consulta de Compra de Crypto" class="btn-contact">Contactar por Email</a>
         </div>
-
-        <p class="footer">Datos oficiales de CoinGecko • Actualizado cada 30 seg.</p>
     </div>
 
     <script>
-        async function getPrices() {
+        const symbols = { usd: '$', jpy: '¥' };
+
+        async function updatePrices() {
+            const currency = document.getElementById('currencySelector').value;
+            const symbol = symbols[currency];
+            
             try {
-                // Consultamos BTC, ETH y USDT en Yenes Japoneses (JPY)
-                const url = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=jpy';
+                const url = `https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=${currency}`;
                 const response = await fetch(url);
                 const data = await response.json();
 
-                document.getElementById('btc-price').innerText = '¥ ' + data.bitcoin.jpy.toLocaleString();
-                document.getElementById('eth-price').innerText = '¥ ' + data.ethereum.jpy.toLocaleString();
-                document.getElementById('usdt-price').innerText = '¥ ' + data.tether.jpy.toLocaleString();
+                document.getElementById('btc-price').innerText = symbol + ' ' + data.bitcoin[currency].toLocaleString();
+                document.getElementById('eth-price').innerText = symbol + ' ' + data.ethereum[currency].toLocaleString();
+                document.getElementById('usdt-price').innerText = symbol + ' ' + data.tether[currency].toLocaleString();
             } catch (error) {
-                console.error("Error:", error);
-                document.querySelectorAll('.price').forEach(el => el.innerText = 'Error');
+                console.error("Error cargando precios");
             }
         }
 
-        getPrices();
-        setInterval(getPrices, 30000); 
+        updatePrices();
+        setInterval(updatePrices, 30000);
     </script>
 </body>
 </html>
