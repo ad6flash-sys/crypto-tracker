@@ -53,6 +53,7 @@
             <select id="currencySelector" onchange="updateAll()">
                 <option value="usd">USD</option>
                 <option value="jpy">JPY</option>
+                <option value="eur">EUR</option>
             </select>
         </div>
     </nav>
@@ -120,19 +121,25 @@
             document.getElementById('txt-order-title').innerText = t.order;
         }
 
-        async function updateAll() {
-            const curr = document.getElementById('currencySelector').value;
-            const sym = curr === 'usd' ? '$' : '¥';
-            try {
-                const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=${curr}`);
-                const data = await res.json();
-                
-                document.getElementById('market-btc').innerText = sym + ' ' + (data.bitcoin[curr] * feeMultiplier).toLocaleString();
-                document.getElementById('market-eth').innerText = sym + ' ' + (data.ethereum[curr] * feeMultiplier).toLocaleString();
-                document.getElementById('market-usdt').innerText = sym + ' ' + (data.tether[curr] * feeMultiplier).toLocaleString();
-            } catch (e) { console.error("Error al actualizar precios"); }
-        }
+       async function updateAll() {
+    const curr = document.getElementById('currencySelector').value;
+    
+    // Usamos "let" para que nos deje cambiar el símbolo después
+    let sym = '$'; 
+    if (curr === 'jpy') sym = '¥';
+    if (curr === 'eur') sym = '€';
 
+    try {
+        const res = await fetch(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum,tether&vs_currencies=${curr}`);
+        const data = await res.json();
+        
+        document.getElementById('market-btc').innerText = sym + ' ' + (data.bitcoin[curr] * feeMultiplier).toLocaleString();
+        document.getElementById('market-eth').innerText = sym + ' ' + (data.ethereum[curr] * feeMultiplier).toLocaleString();
+        document.getElementById('market-usdt').innerText = sym + ' ' + (data.tether[curr] * feeMultiplier).toLocaleString();
+    } catch (e) { 
+        console.error("Error al actualizar precios"); 
+    }
+}
         async function enviarAlExcel() {
             const status = document.getElementById('msgEstado');
             const email = document.getElementById('userEmail').value;
